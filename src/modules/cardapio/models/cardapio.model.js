@@ -1,6 +1,6 @@
-const { DataTypes } = require('sequelize');
+
 import { DataTypes } from 'sequelize';
-import sequelize from '../db/config.js';
+import sequelize from '../../../config/database.js';
 
 //Nome do modelo "Cardapio"
 const CardapioModel = sequelize.define(
@@ -19,12 +19,12 @@ const CardapioModel = sequelize.define(
     },
     // Model attributes are defined here
     nome: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(200),
       allowNull: false,
       validate:{
         len:{
-            args: [2, 100],
-            msg: 'O nome deve ter no minimo dois caracteres e no maximo 100 caracteres.'
+            args: [1, 200],
+            msg: 'O nome tem um limite de 200 caracteres.'
         },
         notEmpty:{
             msg: 'O campo de nome não pode ser vazio.'
@@ -32,22 +32,24 @@ const CardapioModel = sequelize.define(
       }
     },
     descricao: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(100),
         allowNull: false,
         validate:{
             notEmpty:{
-                args: [2, 100],
-                msg: 'A descrição deve ter no minimo dois caracteres e no maximo 100 caracteres.'
+                msg: 'A descrição  tem um limite de 100 caracteres.'
             }
         }
     },
-    tamanho: {
-        type: DataTypes.STRING,
+    porcao: {
+        type: DataTypes.CHAR,
         allowNull: false,
         validate:{
             notEmpty:{
-                args: [2, 3],
-                msg: 'O nome deve ter no minimo dois caracteres e no maximo 3 caracteres.'
+                msg: 'O campo de porção não pode ser vazio.'
+            },
+            len:{
+                args:[1, 2],
+                msg: "A porção deve ter 1 ou 2 carcteres."
             }
         }
     },
@@ -59,14 +61,22 @@ const CardapioModel = sequelize.define(
                 msg: 'O preço não está de acordo com parâmetros.'
             }
         }
+    },
+    usuario_id: {
+      type: DataTypes.UUID,
+      references:{
+        model: "usuario",
+        key: "id"
+      }
     }
     
   },
   {
-    tableName: 'cliente',
-    createdat: 'criado_em',
-    updatedat: 'atualizado_em',
+    tableName: 'cardapio',
+    createdAt: 'criado_em',
+    updatedAt: 'atualizado_em',
     deletedAt: 'excluido_em',
+    paranoid: true
   },
 );
 

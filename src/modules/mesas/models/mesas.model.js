@@ -1,6 +1,6 @@
-const { DataTypes } = require('sequelize');
+
 import { DataTypes } from 'sequelize';
-import sequelize from '../db/config.js';
+import sequelize from '../../../config/database.js';
 
 //Nome do modelo "Mesas"
 const MesasModel = sequelize.define(
@@ -18,30 +18,38 @@ const MesasModel = sequelize.define(
       }
     },
     numero: {
-        type: DataTypes.NUMBER,
-        allowNull: false,
-        validation:{
-            isNumeric:{
-            msg: 'O número da mesa não está de acordo com os parâmetros.'
-            }
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate:{
+        isNumeric:{
+        msg: 'O número da mesa não está de acordo com os parâmetros.'
         }
+      }
     },
     capacidade: {
-        type: DataTypes.NUMBER,
-        allowNull: false,
-        validation:{
-            isNumeric:{
-            msg: 'O número da mesa não está de acordo com os parâmetros.'
-            }
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate:{
+        isInt:{
+          msg: 'A capacidade da mesa não pode estar vazia.'
         }
+      }
+    },
+    usuario_id: {
+      type: DataTypes.UUID,
+      references:{
+        model: "usuario",
+        key: "id"
+      }
     }
 
   },
   {
     tableName: 'mesas',
-    createdat: 'criado_em',
-    updatedat: 'atualizado_em',
+    createdAt: 'criado_em',
+    updatedAt: 'atualizado_em',
     deletedAt: 'excluido_em',
+    paranoid: true
   },
 );
 

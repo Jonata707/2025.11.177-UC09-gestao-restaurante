@@ -4,10 +4,13 @@ dotenv.config();
 
 const sequelize = new Sequelize(process.env.DATABASE_URL);
 
-try {
-  await sequelize.authenticate();
-  console.log('Banco de dados conectado com sucesso');
-} catch (error) {
-  console.error('Falha ao conectar com o banco de dados', error);
-}
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Banco de dados conectado com sucesso');
+  } catch (error) {
+    console.error('Falha ao conectar com o banco de dados', error);
+  }
+})();
+
 export default sequelize;

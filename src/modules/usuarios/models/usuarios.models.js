@@ -1,6 +1,6 @@
-const { DataTypes } = require('sequelize');
+
 import { DataTypes } from 'sequelize';
-import sequelize from '../db/config.js';
+import sequelize from '../../../config/database.js';
 
 //Nome do modelo "Usuario"
 const UsuarioModel = sequelize.define(
@@ -52,29 +52,29 @@ const UsuarioModel = sequelize.define(
         }
     },
     telefone: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.STRING(20),
       allowNull: false,
       validate:{
         isNumeric:{
-            msg: 'Os dígiyos do telefone não estão de acordo com os parâmetros.'
+            msg: 'Os dígitos do telefone não estão de acordo com os parâmetros.'
         }
       }
     },
     perfil : {
-        type: DataTypes.ENUM('admin', 'seller', 'cliente'),
+        type: DataTypes.ENUM('admin', 'cliente'),
         allowNull: false,
         validate:{
             isIn:{
-                args: [['admin', 'seller', 'cliente']],
-                msg: 'O perfil deve ser admin, seller ou cliente.'
+                args: [['admin', 'cliente']],
+                msg: 'O perfil deve ser admin ou cliente.'
             }
         }
     },
     senha : {
-        type: DataTypes.STRING(15),
+      type: DataTypes.STRING(255),
         allowNull: false,
         validate:{
-            is: '^(?=.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@!#$%?])[A-Za-z\d@!#$%?]+$',
+            is: /^(?=.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@!#$%?])[A-Za-z\d@!#$%?]+$/,
             msg: 'A senha deve ter no minimo 8 caracteres, uma letra maiuscula, uma letra minuscula, um numero e um caracter especial.'
         }
 
@@ -82,9 +82,10 @@ const UsuarioModel = sequelize.define(
   },
   {
     tableName: 'usuario',
-    createdat: 'criado_em',
-    updatedat: 'atualizado_em',
+    createdAt: 'criado_em',
+    updatedAt: 'atualizado_em',
     deletedAt: 'excluido_em',
+    paranoid: true
   },
 );
 
